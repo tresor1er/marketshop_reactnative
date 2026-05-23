@@ -3,10 +3,12 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+// Importation des fournisseurs de contexte (Global State)
 import { ThemeProvider, ThemeContext } from './src/store/ThemeContext';
 import { CartProvider } from './src/store/CartContext';
 import { OrderProvider } from './src/store/OrderContext';
 
+// Importation des différents écrans de l'application
 import CatalogScreen from './src/screens/CatalogScreen';
 import ProductDetailScreen from './src/screens/ProductDetailScreen';
 import CartScreen from './src/screens/CartScreen';
@@ -14,9 +16,11 @@ import CheckoutScreen from './src/screens/CheckoutScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 
-const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+// Création des navigateurs
+const Tab = createBottomTabNavigator(); // Navigation par onglets en bas
+const Stack = createNativeStackNavigator(); // Navigation en pile (pour aller d'une page à l'autre)
 
+// Pile de navigation pour le catalogue (Catalogue -> Détail)
 function CatalogStack() {
   return (
     <Stack.Navigator>
@@ -26,6 +30,7 @@ function CatalogStack() {
   );
 }
 
+// Pile de navigation pour le panier (Panier -> Paiement)
 function CartStack() {
   return (
     <Stack.Navigator>
@@ -35,6 +40,7 @@ function CartStack() {
   );
 }
 
+// Configuration des onglets principaux (barre de navigation en bas)
 function MainTabs() {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
@@ -46,6 +52,7 @@ function MainTabs() {
   );
 }
 
+// Composant principal qui gère le thème (Clair/Sombre) et la navigation
 function MainApp() {
   const { isDarkMode } = useContext(ThemeContext);
 
@@ -56,6 +63,7 @@ function MainApp() {
   );
 }
 
+// Point d'entrée de l'application, on englobe tout avec les Providers
 export default function App() {
   return (
     <ThemeProvider>

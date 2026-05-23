@@ -19,7 +19,7 @@ export default function HistoryScreen() {
     <View style={[styles.card, { backgroundColor: colors.card }]}>
       <View style={styles.header}>
         <Text style={[styles.orderId, { color: colors.text }]}>Commande #{item.id}</Text>
-        <Text style={styles.total}>${item.total.toFixed(2)}</Text>
+        <Text style={styles.total}>{(item.total * 600).toFixed(0)} FCFA</Text>
       </View>
       <Text style={[styles.date, { color: colors.text }]}>{item.date} - {item.itemCount} articles</Text>
       <View style={styles.divider} />

@@ -6,21 +6,26 @@ import { CartContext } from '../store/CartContext';
 import { useTheme } from '@react-navigation/native';
 
 export default function ProfileScreen() {
+  // Contexte pour le thème (Clair/Sombre)
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+  // Contextes pour vider les données
   const { clearOrders } = useContext(OrderContext);
   const { clearCart } = useContext(CartContext);
   const { colors } = useTheme();
 
+  // États locaux pour les infos de l'utilisateur
   const [name, setName] = useState('John Doe');
   const [email, setEmail] = useState('john.doe@example.com');
   const [phone, setPhone] = useState('+1234567890');
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false); // Mode édition actif/inactif
 
+  // Fonction pour sauvegarder le profil
   const handleSave = () => {
-    setIsEditing(false);
+    setIsEditing(false); // Désactive le mode édition
     Alert.alert('Succès', 'Profil mis à jour');
   };
 
+  // Fonction pour effacer toutes les données locales
   const handleClearData = () => {
     Alert.alert(
       'Vider mes données',
@@ -31,8 +36,8 @@ export default function ProfileScreen() {
           text: 'Confirmer', 
           style: 'destructive',
           onPress: () => {
-            clearOrders();
-            clearCart();
+            clearOrders(); // Vide l'historique
+            clearCart();   // Vide le panier
             Alert.alert('Succès', 'Données supprimées');
           }
         }
@@ -42,6 +47,7 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
+      {/* En-tête avec avatar et bouton modifier/sauvegarder */}
       <View style={styles.header}>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>👤</Text>
@@ -51,12 +57,13 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
+      {/* Formulaire des informations personnelles */}
       <View style={[styles.form, { backgroundColor: colors.card }]}>
         <TextInput
           style={[styles.input, { color: colors.text, borderColor: colors.border }]}
           value={name}
           onChangeText={setName}
-          editable={isEditing}
+          editable={isEditing} // Modifiable uniquement si isEditing est true
           placeholder="Nom"
           placeholderTextColor="#999"
         />
@@ -78,11 +85,13 @@ export default function ProfileScreen() {
         />
       </View>
 
+      {/* Paramètres de l'application (Mode Sombre) */}
       <View style={[styles.settings, { backgroundColor: colors.card }]}>
         <Text style={[styles.settingText, { color: colors.text }]}>Mode Sombre</Text>
         <Switch value={isDarkMode} onValueChange={toggleTheme} />
       </View>
 
+      {/* Bouton de réinitialisation des données */}
       <TouchableOpacity style={styles.clearBtn} onPress={handleClearData}>
         <Text style={styles.clearBtnText}>Vider mes données</Text>
       </TouchableOpacity>
@@ -90,6 +99,7 @@ export default function ProfileScreen() {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },

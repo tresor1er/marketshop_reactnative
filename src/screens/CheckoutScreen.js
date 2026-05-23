@@ -5,40 +5,48 @@ import { OrderContext } from '../store/OrderContext';
 import { useTheme } from '@react-navigation/native';
 
 export default function CheckoutScreen({ navigation }) {
+  // Récupération des données du panier
   const { cartItems, total, clearCart } = useContext(CartContext);
+  // Fonction pour ajouter une commande à l'historique
   const { addOrder } = useContext(OrderContext);
   const { colors } = useTheme();
 
+  // États pour le formulaire de livraison
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
 
+  // Fonction appelée lors de la validation de la commande
   const handleConfirm = () => {
+    // Vérification que tous les champs sont remplis
     if (!name || !phone || !address || !city) {
       Alert.alert('Erreur', 'Tous les champs sont obligatoires.');
       return;
     }
 
+    // Vérification que le téléphone est un numéro
     if (isNaN(phone)) {
       Alert.alert('Erreur', 'Le téléphone doit être numérique.');
       return;
     }
 
+    // Création de l'objet commande avec toutes les informations
     const order = {
-      date: new Date().toLocaleString(),
+      date: new Date().toLocaleString(), // Date actuelle
       total,
-      itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0),
+      itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0), // Nombre total d'articles
       customerName: name,
       customerPhone: phone,
       customerAddress: address,
       customerCity: city,
-      items: cartItems,
+      items: cartItems, // Détails des articles achetés
     };
 
-    addOrder(order);
-    clearCart();
+    addOrder(order); // Ajout à l'historique
+    clearCart();     // Vidage du panier
     
+    // Message de succès et redirection vers l'historique
     Alert.alert('Succès', 'Commande confirmée !', [
       { text: 'OK', onPress: () => navigation.navigate('History') }
     ]);
@@ -46,21 +54,23 @@ export default function CheckoutScreen({ navigation }) {
 
   return (
     <ScrollView style={styles.container}>
+      {/* Section Récapitulatif de la commande */}
       <Text style={[styles.title, { color: colors.text }]}>Récapitulatif</Text>
       <View style={[styles.summaryBox, { backgroundColor: colors.card }]}>
         {cartItems.map(item => (
           <View key={item.id} style={styles.summaryItem}>
             <Text style={{ flex: 1, color: colors.text }} numberOfLines={1}>{item.title}</Text>
             <Text style={{ width: 40, textAlign: 'center', color: colors.text }}>x{item.quantity}</Text>
-            <Text style={{ width: 60, textAlign: 'right', color: colors.text }}>${(item.price * item.quantity).toFixed(2)}</Text>
+            <Text style={{ width: 80, textAlign: 'right', color: colors.text }}>{(item.price * item.quantity * 600).toFixed(0)} FCFA</Text>
           </View>
         ))}
         <View style={styles.totalRow}>
           <Text style={[styles.totalText, { color: colors.text }]}>Total à payer:</Text>
-          <Text style={styles.totalPrice}>${total.toFixed(2)}</Text>
+          <Text style={styles.totalPrice}>{(total * 600).toFixed(0)} FCFA</Text>
         </View>
       </View>
 
+      {/* Section Formulaire de livraison */}
       <Text style={[styles.title, { color: colors.text }]}>Informations de livraison</Text>
       <View style={[styles.form, { backgroundColor: colors.card }]}>
         <TextInput 
@@ -94,6 +104,7 @@ export default function CheckoutScreen({ navigation }) {
         />
       </View>
 
+      {/* Bouton de confirmation */}
       <TouchableOpacity style={styles.confirmBtn} onPress={handleConfirm}>
         <Text style={styles.confirmText}>Confirmer la commande</Text>
       </TouchableOpacity>
@@ -101,6 +112,7 @@ export default function CheckoutScreen({ navigation }) {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
   title: { fontSize: 20, fontWeight: 'bold', marginBottom: 8, marginTop: 16 },

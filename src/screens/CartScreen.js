@@ -4,9 +4,11 @@ import { CartContext } from '../store/CartContext';
 import { useTheme } from '@react-navigation/native';
 
 export default function CartScreen({ navigation }) {
+  // Récupération des données et fonctions du panier depuis le contexte global
   const { cartItems, total, updateQuantity, removeFromCart } = useContext(CartContext);
   const { colors } = useTheme();
 
+  // Affichage si le panier est vide
   if (cartItems.length === 0) {
     return (
       <View style={styles.emptyContainer}>
@@ -15,15 +17,17 @@ export default function CartScreen({ navigation }) {
     );
   }
 
+  // Fonction pour afficher chaque produit dans la liste du panier
   const renderItem = ({ item }) => (
     <View style={[styles.card, { backgroundColor: colors.card }]}>
       <Image source={{ uri: item.image }} style={styles.image} resizeMode="contain" />
       <View style={styles.info}>
         <Text style={[styles.title, { color: colors.text }]} numberOfLines={1}>{item.title}</Text>
-        <Text style={styles.price}>${item.price.toFixed(2)}</Text>
-        <Text style={{ color: colors.text }}>Sous-total: ${(item.price * item.quantity).toFixed(2)}</Text>
+        <Text style={styles.price}>{(item.price * 600).toFixed(0)} FCFA</Text>
+        <Text style={{ color: colors.text }}>Sous-total : {(item.price * item.quantity * 600).toFixed(0)} FCFA</Text>
       </View>
       <View style={styles.actions}>
+        {/* Contrôles de quantité */}
         <View style={styles.quantityRow}>
           <TouchableOpacity onPress={() => updateQuantity(item.id, item.quantity - 1)}>
             <Text style={[styles.btnText, { color: colors.text }]}>-</Text>
@@ -33,6 +37,7 @@ export default function CartScreen({ navigation }) {
             <Text style={[styles.btnText, { color: colors.text }]}>+</Text>
           </TouchableOpacity>
         </View>
+        {/* Bouton de suppression */}
         <TouchableOpacity onPress={() => removeFromCart(item.id)}>
           <Text style={styles.deleteText}>🗑️</Text>
         </TouchableOpacity>
@@ -42,16 +47,19 @@ export default function CartScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      {/* Liste déroulante des articles */}
       <FlatList
         data={cartItems}
         keyExtractor={item => item.id.toString()}
         renderItem={renderItem}
         contentContainerStyle={styles.list}
       />
+      
+      {/* Section pied de page avec le total et le bouton commander */}
       <View style={[styles.footer, { backgroundColor: colors.card }]}>
         <View style={styles.totalRow}>
           <Text style={[styles.totalLabel, { color: colors.text }]}>Total:</Text>
-          <Text style={styles.totalPrice}>${total.toFixed(2)}</Text>
+          <Text style={styles.totalPrice}>{(total * 600).toFixed(0)} FCFA</Text>
         </View>
         <TouchableOpacity style={styles.checkoutBtn} onPress={() => navigation.navigate('Checkout')}>
           <Text style={styles.checkoutText}>Passer commande</Text>
@@ -61,6 +69,7 @@ export default function CartScreen({ navigation }) {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: { flex: 1 },
   emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },

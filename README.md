@@ -30,11 +30,9 @@ MarketShop est une application mobile d'e-commerce complète et moderne. Elle pe
 * `@react-native-async-storage/async-storage`: 2.2.0 (Pour la sauvegarde locale des données)
 
 ## 📸 Captures d'écran
-*(Remplacez les liens ci-dessous par les vraies images de votre application, placez vos images dans un dossier racine et liez-les ici)*
-
-1. ![Catalogue](lien_vers_image_catalogue.png)
-2. ![Détail Produit](lien_vers_image_detail.png)
-3. ![Panier](lien_vers_image_panier.png)
+![alt text](image.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
 
 ## 🚧 Difficultés rencontrées et solutions
 Lors du développement, l'une des principales difficultés a été la synchronisation de l'état global de l'application, en particulier pour maintenir le panier à jour à travers les différents écrans sans recharger systématiquement les données. Cela a été résolu en utilisant l'API `Context` de React (`CartContext`, `ThemeContext`), ce qui a permis de centraliser les données et de rendre les composants réactifs aux changements de manière fluide.
